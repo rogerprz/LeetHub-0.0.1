@@ -24,7 +24,7 @@ const languages = {
   Swift: '.swift',
   TypeScript: '.ts',
 }
-
+console.log('HERE')
 /* Commit messages */
 const readmeMsg = 'Create README - LeetHub';
 const discussionMsg = 'Prepend discussion post - LeetHub';
@@ -34,7 +34,7 @@ const createNotesMsg = 'Attach NOTES - LeetHub';
 const NORMAL_PROBLEM = 0;
 const EXPLORE_SECTION_PROBLEM = 1;
 
-/* Difficulty of most recenty submitted question */
+/* Difficulty of most recently submitted question */
 let difficulty = '';
 
 /* state of upload for progress */
@@ -902,6 +902,7 @@ LeetCodeV2.prototype.markUploadFailed = function () {
 
 /* Sync to local storage */
 chrome.storage.local.get('isSync', data => {
+  console.log("LOCAL HERE")
   keys = [
     'leethub_token',
     'leethub_username',
@@ -1035,12 +1036,25 @@ function handleCtrlEnter(event) {
 // TODO: have event listeners to be added once the button elements are loaded using Mutation Observer
 // maybe this will help https://stackoverflow.com/questions/68329405/javascript-wait-until-element-loaded-on-website-using-chrome-extension
 // Wait for the submit button to load
-setTimeout(() => {
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const initializeAfterDelay = async () => {
+  await delay(2000);
+
   const v1SubmitBtn = document.querySelector('[data-cy="submit-code-btn"]');
   const v2SubmitBtn = document.querySelector('[data-e2e-locator="console-submit-button"]');
   const submitBtn = !isLeetCodeV2 ? v1SubmitBtn : v2SubmitBtn;
-  submitBtn.addEventListener('click', loader);
+  
+  console.log('V2', v2SubmitBtn, !isLeetCodeV2);
+if (submitBtn) {
+  submitBtn.addEventListener('click', loader)
+}
 
-  const textarea = document.getElementsByTagName('textarea')[0]
-  textarea.addEventListener('keydown', handleCtrlEnter)
-}, 2000);
+  const textarea = document.getElementsByTagName('textarea')[0];
+  console.log("TEXT:", textarea);
+if (textarea) {
+   textarea.addEventListener('keydown', handleCtrlEnter)
+}
+};
+
+initializeAfterDelay();

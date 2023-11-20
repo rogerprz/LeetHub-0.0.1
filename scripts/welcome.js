@@ -87,6 +87,7 @@ const createRepo = (token, name) => {
   };
   data = JSON.stringify(data);
 
+  console.log('D:', data)
   const xhr = new XMLHttpRequest();
   xhr.addEventListener('readystatechange', function () {
     if (xhr.readyState === 4) {
